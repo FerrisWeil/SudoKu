@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F865660523D101CD00DD056D /* SukokuSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F865660423D101CD00DD056D /* SukokuSolver.swift */; };
 		F86A8A8023D0FB3600CC3FDD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86A8A7F23D0FB3600CC3FDD /* AppDelegate.swift */; };
 		F86A8A8223D0FB3600CC3FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86A8A8123D0FB3600CC3FDD /* SceneDelegate.swift */; };
 		F86A8A8423D0FB3600CC3FDD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86A8A8323D0FB3600CC3FDD /* ContentView.swift */; };
 		F86A8A8623D0FB3D00CC3FDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F86A8A8523D0FB3D00CC3FDD /* Assets.xcassets */; };
 		F86A8A8923D0FB3D00CC3FDD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F86A8A8823D0FB3D00CC3FDD /* Preview Assets.xcassets */; };
 		F86A8A8C23D0FB3D00CC3FDD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F86A8A8A23D0FB3D00CC3FDD /* LaunchScreen.storyboard */; };
+		F86A8A9423D0FC7500CC3FDD /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86A8A9323D0FC7500CC3FDD /* Cell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F865660423D101CD00DD056D /* SukokuSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SukokuSolver.swift; sourceTree = "<group>"; };
 		F86A8A7C23D0FB3600CC3FDD /* Sudoku Solver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sudoku Solver.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F86A8A7F23D0FB3600CC3FDD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F86A8A8123D0FB3600CC3FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +27,7 @@
 		F86A8A8823D0FB3D00CC3FDD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F86A8A8B23D0FB3D00CC3FDD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F86A8A8D23D0FB3D00CC3FDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F86A8A9323D0FC7500CC3FDD /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,8 @@
 			children = (
 				F86A8A7F23D0FB3600CC3FDD /* AppDelegate.swift */,
 				F86A8A8123D0FB3600CC3FDD /* SceneDelegate.swift */,
+				F86A8A9323D0FC7500CC3FDD /* Cell.swift */,
+				F865660423D101CD00DD056D /* SukokuSolver.swift */,
 				F86A8A8323D0FB3600CC3FDD /* ContentView.swift */,
 				F86A8A8523D0FB3D00CC3FDD /* Assets.xcassets */,
 				F86A8A8A23D0FB3D00CC3FDD /* LaunchScreen.storyboard */,
@@ -147,8 +153,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F86A8A8023D0FB3600CC3FDD /* AppDelegate.swift in Sources */,
+				F86A8A9423D0FC7500CC3FDD /* Cell.swift in Sources */,
 				F86A8A8223D0FB3600CC3FDD /* SceneDelegate.swift in Sources */,
 				F86A8A8423D0FB3600CC3FDD /* ContentView.swift in Sources */,
+				F865660523D101CD00DD056D /* SukokuSolver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
