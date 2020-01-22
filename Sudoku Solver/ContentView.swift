@@ -7,22 +7,29 @@
 //
 
 import SwiftUI
-import Combine
+import CoreData
 
 struct ContentView: View {
-	//	@State private var num1 = ""
 	
-	@State var cells = fillCells()
+	@FetchRequest(entity: GameData.entity(), sortDescriptors: []) var games: FetchedResults<GameData>
+	@Environment(\.managedObjectContext) var moc
+	
+	
 	@State var num = 0
 	@State var selectedNumber = 0
+	let pickerValues = ["-","1","2","3","4","5","6","7","8","9"]
 	@State var activeCell = -1
+	@State var game = Game()
+	@State var currentGameId = UUID(uuidString: "0")
+	@State var consoleText = ""
 //	@State private var message = false
+	
+	let backgroundColor = Color(red: 70/255, green: 70/255, blue: 70/255)
 	
 	
 	var body: some View {
 		ZStack{
-			Color(red: 70/255, green: 70/255, blue: 70/255)
-				.edgesIgnoringSafeArea(.all)
+			backgroundColor.edgesIgnoringSafeArea(.all)
 			VStack(spacing: 0){
 				//Heading
 				VStack {
@@ -49,17 +56,62 @@ struct ContentView: View {
 							}
 						}
 					}
-					Spacer().frame(height: 20)
+					//Buttons and UI
+					Text(self.consoleText)
+						.frame(height: 10)
+						.padding(.top, 5)
 					Picker("Numbers",selection: $selectedNumber){
-						ForEach(1 ..< 10) {
-							Text("\($0)").tag($0)
+						ForEach((0 ..< 10)) {
+							Text(self.pickerValues[$0]).tag($0)
 						}
-					}.pickerStyle(SegmentedPickerStyle()).padding(20)
+					}.pickerStyle(SegmentedPickerStyle()).padding(.horizontal, 20)
+					HStack {
+						Button(action: {
+							self.checkAction()
+						}){
+							Text("Check")
+						}
+						Button(action: {
+							self.saveGame()
+						}){
+							Text("Save")
+						}
+						Button(action: {
+							self.clearSaves()
+						}){
+							Text("Clear_Saves")
+						}
+						Button(action: {
+							self.clearBoard()
+						}){
+							Text("Clear_Board")
+						}
+						Button(action: {
+							self.game.getSolvedBoard()
+							self.consoleText = "Solved Board Loaded"
+						}){
+							Text("Solved_Board")
+						}
+					}
+					//Games
+					ForEach(games, id: \.id) { game in
+						HStack {
+							Text("\(game.id!)")
+								.background(self.getBackgroundColor(id: game.id!))
+								.cornerRadius(5)
+							Button(action: {
+								self.loadGame(id: game.id!)
+							}){
+								
+								Text("Load")
+							}
+						}
+					}
 					Spacer()
 					Button(action: {
 						self.runSolver()
 					}){
-						Text("\(activeCell)")
+						Text("Run Solver")
 					}
 				}
 			}
@@ -73,49 +125,91 @@ struct ContentView: View {
 	}
 	
 	func runSolver() {
-		cells[activeCell].removeColor()
-		activeCell = -1
-		cells = Solver.solve(oldCells: cells)
+		if activeCell > -1 {game.getCells()[activeCell].removeColor()
+			activeCell = -1 }
+		if game.solve() { self.consoleText = "Game Successfully Solved" }
+		else { self.consoleText = "Game Could Not Be Solved"}
+	}
+	
+	func checkAction() {
+		if activeCell != -1 {
+			//if the numnber if diffrent and it is valid, update it
+			if Int(game.getCells()[activeCell].getText()) != selectedNumber {
+				if Solver.checkMove(cells: game.getCells(), cell: game.cells[activeCell], changedValue: selectedNumber) {
+					game.updateCell(cell: activeCell, result: selectedNumber)
+					self.consoleText = "Valid!"
+				}
+				else {
+					self.consoleText = "That move is invalid"
+					selectedNumber = ((Int(game.getCells()[activeCell].getText()) ?? 1))
+				}
+			}
+		}
 	}
 	
 	func setActive(row: Int, col: Int) {
 		if activeCell != -1 {
-			cells[activeCell].removeColor()
+			game.getCells()[activeCell].removeColor()
 		}
 		activeCell = (row*9+col)
-		cells[activeCell].setColor(color: Color(red: 22/255, green: 188/255, blue: 188/255))
-		selectedNumber = (Int(cells[activeCell].getText()) ?? 1)-1
+		game.getCells()[activeCell].setColor(color: Color(red: 22/255, green: 188/255, blue: 188/255))
+		selectedNumber = (Int(game.getCells()[activeCell].getText()) ?? 0)
 	}
 	
-	func getColor(row: Int, col: Int) -> Color {return cells[row*9+col].getColor()}
-	
-	func getCellText(row: Int, col: Int) -> String{
-		if activeCell != -1 {
-			//if the numnber if diffrent and it is valid, update it
-			if Int(cells[activeCell].getText()) != selectedNumber+1 {
-				if Solver.checkMove(cells: cells, changedCell: activeCell, changedValue: selectedNumber+1) {
-					cells[activeCell].setBox(box: selectedNumber+1)
+	func loadGame(id: UUID) {
+		if activeCell != -1 {self.game.getCells()[activeCell].removeColor()}
+		for game in self.games {
+			if game.id == id {
+				
+				if self.game.getCellsFromString(cellString: game.cellString!) {
+					self.currentGameId = game.id!
+					self.activeCell = -1
+					self.selectedNumber = -1
+					self.consoleText = "Game Loaded"
+					return
 				}
-				else {
-//					message = true;
-					selectedNumber = ((Int(cells[activeCell].getText()) ?? 1)-1)
-					return cells[activeCell].getText()
-				}
+				else {return} //TODO: Handle error
 			}
 		}
-		if (row*9+col) != activeCell {return String(cells[row*9+col].getText())}
-		return String(1+selectedNumber)
 	}
-}
-
-func fillCells() -> [Cell] {
-	var cells = [Cell]()
-	for row in 0 ..< 9 {
-		for col in 0 ..< 9 {
-			cells.append(Cell(row: row, col: col))
+	
+	func saveGame() {
+		self.moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		let gameToSave = GameData(context: self.moc)
+		if UUID(uuidString: "0") != self.currentGameId {gameToSave.id = self.currentGameId}
+		else {gameToSave.id = UUID()}
+		gameToSave.cellString = self.game.getStringFromArr()
+		self.currentGameId = gameToSave.id!
+		try? self.moc.save()
+		self.consoleText = "Game Saved"
+	}
+	
+	func clearSaves() {
+		for game in games {
+			self.moc.delete(game)
 		}
+		try? self.moc.save()
+		self.consoleText = "Saves Cleared"
+//		self.moc.reset()
 	}
-	return cells
+	
+	func clearBoard() {
+		self.game = Game()
+		self.currentGameId = UUID(uuidString: "0")
+		self.consoleText = "Board Cleared"
+	}
+	
+	func getColor(row: Int, col: Int) -> Color {return game.getCells()[row*9+col].getColor()}
+	
+	func getBackgroundColor(id: UUID) -> Color {if id == self.currentGameId {return Color.blue}
+		else {return backgroundColor}
+	}
+	
+	func getCellText(row: Int, col: Int) -> String{
+		if (row*9+col) != activeCell {return String(game.getCells()[row*9+col].getText())}
+		if selectedNumber == 0 {return ""}
+		return String(selectedNumber)
+	}
 }
 
 struct ContentView_Previews: PreviewProvider {
