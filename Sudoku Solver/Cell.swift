@@ -22,10 +22,11 @@ class Cell {
 	init(row: Int, col: Int){
 		self.row = row
 		self.col = col
-		self.box = findBox()
+		self.box = Int(row/3)*3 + col/3
 		findColor()
 	}
 	
+	//General getter methods
 	func getText() -> String {if result > 0 {return "\(result)"}; return ""}
 	func getRow() -> Int {return row}
 	func getCol() -> Int {return col}
@@ -35,18 +36,17 @@ class Cell {
 	func getColor() -> Color {return color}
 	func getDefaultColor() -> Color {return defaultColor}
 	
+	//General setter methods
 	func setBox(box: Int) {self.box = box}
 	func setResult(result: Int) {self.result = result; self.possibleResults = [result]}
 	func setColor(color: Color) {self.color = color}
-	func removePossibleResult(result: Int) {
-		for i in 0 ..< self.possibleResults.count {
-			if result == self.possibleResults[i]  {self.possibleResults.remove(at: i); return}
-		}}
 	func clearPossibleResults() {self.possibleResults = [Int]()}
 	func removeColor() {findColor()}
 	func addPossibleResult(result: Int) {self.possibleResults.append(result)}
-	func addPossibleResult(result: [Int]) {self.possibleResults.removeAll(); self.possibleResults.append(contentsOf: result)}
+	func addPossibleResult(result: [Int]) { self.possibleResults.removeAll(); self.possibleResults.append(contentsOf: result)}
+	func removePossibleResult(result: Int) { self.possibleResults.remove(at: self.possibleResults.firstIndex(of: result)!)}
 	
+	//Returns which box the
 	func findBox() -> Int {
 		var count = 0;
 		for row in [3,6,9] {
@@ -133,131 +133,5 @@ class Game {
 		else if val == 2 {_ = getCellsFromString(cellString: "0,0,0,2,6,0,7,0,1,6,8,0,0,7,0,0,9,0,1,9,0,0,0,4,5,0,0,8,2,0,1,0,0,0,4,0,0,0,4,6,0,2,9,0,0,0,5,0,0,0,3,0,2,8,0,0,9,3,0,0,0,7,4,0,4,0,0,5,0,0,3,6,7,0,3,0,1,8,0,0,0")}
 		else if val == 3 {_ = getCellsFromString(cellString:  "0,0,0,6,0,0,4,0,0,7,0,0,0,0,3,6,0,0,0,0,0,0,9,1,0,8,0,0,0,0,0,0,0,0,0,0,0,5,0,1,8,0,0,0,3,0,0,0,3,0,6,0,4,5,0,4,0,2,0,0,0,6,0,9,0,3,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0")}
 		else if val == 4 {_ = getCellsFromString(cellString: "2,0,0,3,0,0,0,0,0,8,0,4,0,6,2,0,0,3,0,1,3,8,0,0,2,0,0,0,0,0,0,2,0,3,9,0,5,0,7,0,0,0,6,2,1,0,3,2,0,0,6,0,0,0,0,2,0,0,0,9,1,4,0,6,0,1,2,5,0,8,0,9,0,0,0,0,0,1,0,0,2")}
-	}
-}
-
-
-class Solver {
-	
-	/*
-	What happens when the player presses the solve button
-	*/
-	static func solve(cells: inout [[Cell]]) -> Bool {
-		Solver.fillPossibleValues(cells: &cells)
-		var complete = false
-		while(!complete) {
-			complete = true
-			var changed = false
-			for cellRow in cells {
-				for cell in cellRow {
-					let solvedStatus = cell.checkForSolved()
-					if solvedStatus == 2 { changed = true }
-					else if solvedStatus == -1 {
-						complete = false
-						for possibleResult in cell.getPossibleResults(){
-							if !checkMove(cells: cells, cell: cell, changedValue: possibleResult) {cell.removePossibleResult(result: possibleResult)
-								changed = true
-							}
-						}
-					}
-				}
-			}
-			if !changed {
-				if !Solver.solveRowColBox(cells: &cells) {return false}}
-		}
-		return true
-	}
-	
-	static func solveRowColBox(cells: inout [[Cell]]) -> Bool {
-		var changed = false
-		//Checks each row for uniqued possible results
-		for row in 0 ..< 9 {
-			for num in 1 ..< 10 {
-				var foundAt = -1
-				for col in 0 ..< 9 {
-					if cells[row][col].getPossibleResults().contains(num) && cells[row][col].getResult() == 0 {
-						if foundAt > -1 {foundAt = -1; break}
-						foundAt = row*9+col
-					}
-				}
-				if foundAt > -1 {
-					cells[foundAt/9][foundAt%9].setResult(result: num)
-					changed = true
-				}
-			}
-		}
-		//Checks each column for uniqued possible results
-		for col in 0 ..< 9 {
-			for num in 1 ..< 10 {
-				var foundAt = -1
-				for row in 0 ..< 9 {
-					if cells[row][col].getPossibleResults().contains(num) && cells[row][col].getResult() == 0 {
-						if foundAt > -1 {foundAt = -1;break}
-						foundAt = row*9+col
-					}
-				}
-				if foundAt > -1 {
-					cells[foundAt/9][foundAt%9].setResult(result: num)
-					changed = true
-				}
-			}
-		}
-		//Checks each box for uniqued possible results
-		for box in 0 ..< 9 {
-			for num in 1 ..< 10 {
-				var foundAt = -1
-				for row in 0 ..< 3 {
-					for col in 0 ..< 3 {
-						if cells[(box/3)*3+row][(box%3)*3+col].getPossibleResults().contains(num) && cells[(box/3)*3+row][(box%3)*3+col].getResult() == 0 {
-							if foundAt > -1 {foundAt = -2}
-							if foundAt == -1 {foundAt = (((box/3)*3+row))*9+((box%3)*3+col)}
-						}
-					}
-				}
-				if foundAt > -1 {
-					cells[foundAt/9][foundAt%9].setResult(result: num)
-					changed = true
-				}
-			}
-		}
-		return changed
-	}
-	
-	/*
-	Decides if the new move is valid based on Rows Cols and Boxes
-	*/
-	static func checkMove(cells: [[Cell]], cell: Cell, changedValue: Int) -> Bool {
-		if changedValue == 0 {return true}
-		for i in 0 ..< 9 { //Checks cell's rows and cols
-			if cells[i][cell.getCol()].getResult() == changedValue && i != cell.getRow() || cells[cell.getRow()][i].getResult() == changedValue && i != cell.getCol() {return false}
-		}
-		let box = cell.getBox()
-		for row in 0 ..< 3 { //Checks cell's box
-			for col in 0 ..< 3 {
-				let checkCell = cells[((box/3)*3+row)][((box%3)*3+col)]
-				if checkCell.getResult() == changedValue && checkCell.getRow() != cell.getRow() && checkCell.getCol() != cell.getCol() {return false}
-			}
-		}
-		return true
-	}
-	
-	/*
-	Fill the cells with each of their possible values
-	*/
-	static func fillPossibleValues( cells: inout [[Cell]]) {
-		for row in 0 ..< 9 {
-			for col in 0 ..< 9 {
-				cells[row][col].clearPossibleResults()
-				if cells[row][col].getResult() == 0 {
-					cells[row][col].addPossibleResult(result: [Int]())
-					for i in 1 ..< 10 {
-						if Solver.checkMove(cells: cells, cell: cells[row][col], changedValue: i) && !cells[row][col].getPossibleResults().contains(i) {
-							cells[row][col].addPossibleResult(result: i)
-						}
-					}
-				}
-				else {cells[row][col].addPossibleResult(result: cells[row][col].getResult())}
-			}
-		}
 	}
 }

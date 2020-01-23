@@ -14,7 +14,6 @@ struct ContentView: View {
 	@FetchRequest(entity: GameData.entity(), sortDescriptors: []) var games: FetchedResults<GameData>
 	@Environment(\.managedObjectContext) var moc
 	
-	
 	@State var num = 0
 	@State var selectedNumber = 0
 	let pickerValues = ["-","1","2","3","4","5","6","7","8","9"]
@@ -51,7 +50,7 @@ struct ContentView: View {
 										.frame(width: 30, height: 30)
 										.foregroundColor(Color.black)
 										.cornerRadius(5)
-										.background(self.getColor(row: row, col: col))
+										.background(self.game.getCells()[row][col].getColor())
 								}
 							}
 						}
@@ -87,7 +86,7 @@ struct ContentView: View {
 							Text("Clear_Board")
 						}
 						Button(action: {
-							self.game.getSolvedBoard(val: 4)
+							self.game.getSolvedBoard(val: 2)
 							self.consoleText = "Solved Board Loaded"
 						}){
 							Text("Solved_Board")
@@ -124,6 +123,7 @@ struct ContentView: View {
 //		}
 	}
 	
+	//Reaction to pressing the Solve button, solves current puzzle
 	func runSolver() {
 		if activeCell > -1 {game.getCell(cell: activeCell).removeColor()
 			activeCell = -1 }
@@ -131,6 +131,7 @@ struct ContentView: View {
 		else { self.consoleText = "Game Could Not Be Solved"}
 	}
 	
+	//Reaction to pressing the Check button, validates move
 	func checkAction() {
 		if activeCell != -1 {
 			//if the numnber if diffrent and it is valid, update it
@@ -147,6 +148,7 @@ struct ContentView: View {
 		}
 	}
 	
+	//Reaction to when cell is pressed, turns the pressed cell into the active cell
 	func setActive(row: Int, col: Int) {
 		if activeCell != -1 {
 			game.getCell(cell: activeCell).removeColor()
@@ -156,6 +158,7 @@ struct ContentView: View {
 		selectedNumber = (Int(game.getCell(cell: activeCell).getText()) ?? 0)
 	}
 	
+	//Reaction to pressing the load button, loads up a game with a given UUID
 	func loadGame(id: UUID) {
 		if activeCell != -1 {self.game.getCell(cell: activeCell).removeColor()}
 		for game in self.games {
@@ -170,6 +173,7 @@ struct ContentView: View {
 		}
 	}
 	
+	//Reaction to pressing the save button, saves the current game
 	func saveGame() {
 		self.moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		let gameToSave = GameData(context: self.moc)
@@ -181,27 +185,28 @@ struct ContentView: View {
 		self.consoleText = "Game Saved"
 	}
 	
+	//Reaction to pressing the clear_saves button, will delete all game saves
 	func clearSaves() {
 		for game in games {
 			self.moc.delete(game)
 		}
 		try? self.moc.save()
 		self.consoleText = "Saves Cleared"
-//		self.moc.reset()
 	}
 	
+	//Reaction to pressing the clear_board button, will reset the current game
 	func clearBoard() {
 		self.game = Game()
 		self.currentGameId = UUID(uuidString: "0")
 		self.consoleText = "Board Cleared"
 	}
 	
-	func getColor(row: Int, col: Int) -> Color {return game.getCells()[row][col].getColor()}
-	
+	//Helper method to give the background color based on if the file is current or not
 	func getBackgroundColor(id: UUID) -> Color {if id == self.currentGameId {return Color.blue}
 		else {return backgroundColor}
 	}
 	
+	//Helper method to give the cell text based on if it is active or not
 	func getCellText(row: Int, col: Int) -> String{
 		if (row*9+col) != activeCell {return String(game.getCells()[row][col].getText())}
 		if selectedNumber == 0 {return ""}

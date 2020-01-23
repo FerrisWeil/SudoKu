@@ -16,6 +16,7 @@
 		F86A8A8C23D0FB3D00CC3FDD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F86A8A8A23D0FB3D00CC3FDD /* LaunchScreen.storyboard */; };
 		F86A8A9423D0FC7500CC3FDD /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86A8A9323D0FC7500CC3FDD /* Cell.swift */; };
 		F8DA211E23D755C800CD684E /* GameData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA211C23D755C800CD684E /* GameData+CoreDataProperties.swift */; };
+		F8DA212223D9F75600CD684E /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA212123D9F75600CD684E /* Solver.swift */; };
 		F8E38EC723D665E7003B4ECE /* SudokuData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F8E38EC523D665E7003B4ECE /* SudokuData.xcdatamodeld */; };
 		F8E38ECA23D66623003B4ECE /* GameData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E38EC823D66623003B4ECE /* GameData+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +33,7 @@
 		F86A8A8D23D0FB3D00CC3FDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F86A8A9323D0FC7500CC3FDD /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		F8DA211C23D755C800CD684E /* GameData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "GameData+CoreDataProperties.swift"; path = "../../GameData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		F8DA212123D9F75600CD684E /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
 		F8E38EC623D665E7003B4ECE /* SukokuData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SukokuData.xcdatamodel; sourceTree = "<group>"; };
 		F8E38EC823D66623003B4ECE /* GameData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameData+CoreDataClass.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,6 +72,7 @@
 				F86A8A7F23D0FB3600CC3FDD /* AppDelegate.swift */,
 				F86A8A8123D0FB3600CC3FDD /* SceneDelegate.swift */,
 				F86A8A9323D0FC7500CC3FDD /* Cell.swift */,
+				F8DA212123D9F75600CD684E /* Solver.swift */,
 				F8E38EC523D665E7003B4ECE /* SudokuData.xcdatamodeld */,
 				F865660423D101CD00DD056D /* SudokuSolver.swift */,
 				F86A8A8323D0FB3600CC3FDD /* ContentView.swift */,
@@ -171,6 +174,7 @@
 			files = (
 				F86A8A8023D0FB3600CC3FDD /* AppDelegate.swift in Sources */,
 				F8DA211E23D755C800CD684E /* GameData+CoreDataProperties.swift in Sources */,
+				F8DA212223D9F75600CD684E /* Solver.swift in Sources */,
 				F8E38ECA23D66623003B4ECE /* GameData+CoreDataClass.swift in Sources */,
 				F8E38EC723D665E7003B4ECE /* SudokuData.xcdatamodeld in Sources */,
 				F86A8A9423D0FC7500CC3FDD /* Cell.swift in Sources */,
