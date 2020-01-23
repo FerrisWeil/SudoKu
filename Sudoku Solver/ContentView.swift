@@ -87,7 +87,7 @@ struct ContentView: View {
 							Text("Clear_Board")
 						}
 						Button(action: {
-							self.game.getSolvedBoard()
+							self.game.getSolvedBoard(val: 4)
 							self.consoleText = "Solved Board Loaded"
 						}){
 							Text("Solved_Board")
@@ -125,7 +125,7 @@ struct ContentView: View {
 	}
 	
 	func runSolver() {
-		if activeCell > -1 {game.getCells()[activeCell].removeColor()
+		if activeCell > -1 {game.getCell(cell: activeCell).removeColor()
 			activeCell = -1 }
 		if game.solve() { self.consoleText = "Game Successfully Solved" }
 		else { self.consoleText = "Game Could Not Be Solved"}
@@ -134,14 +134,14 @@ struct ContentView: View {
 	func checkAction() {
 		if activeCell != -1 {
 			//if the numnber if diffrent and it is valid, update it
-			if Int(game.getCells()[activeCell].getText()) != selectedNumber {
-				if Solver.checkMove(cells: game.getCells(), cell: game.cells[activeCell], changedValue: selectedNumber) {
+			if Int(game.getCell(cell: activeCell).getText()) != selectedNumber {
+				if Solver.checkMove(cells: game.getCells(), cell: game.getCell(cell: activeCell), changedValue: selectedNumber) {
 					game.updateCell(cell: activeCell, result: selectedNumber)
 					self.consoleText = "Valid!"
 				}
 				else {
 					self.consoleText = "That move is invalid"
-					selectedNumber = ((Int(game.getCells()[activeCell].getText()) ?? 1))
+					selectedNumber = ((Int(game.getCell(cell: activeCell).getText()) ?? 1))
 				}
 			}
 		}
@@ -149,26 +149,23 @@ struct ContentView: View {
 	
 	func setActive(row: Int, col: Int) {
 		if activeCell != -1 {
-			game.getCells()[activeCell].removeColor()
+			game.getCell(cell: activeCell).removeColor()
 		}
 		activeCell = (row*9+col)
-		game.getCells()[activeCell].setColor(color: Color(red: 22/255, green: 188/255, blue: 188/255))
-		selectedNumber = (Int(game.getCells()[activeCell].getText()) ?? 0)
+		game.getCell(cell: activeCell).setColor(color: Color(red: 22/255, green: 188/255, blue: 188/255))
+		selectedNumber = (Int(game.getCell(cell: activeCell).getText()) ?? 0)
 	}
 	
 	func loadGame(id: UUID) {
-		if activeCell != -1 {self.game.getCells()[activeCell].removeColor()}
+		if activeCell != -1 {self.game.getCell(cell: activeCell).removeColor()}
 		for game in self.games {
 			if game.id == id {
-				
-				if self.game.getCellsFromString(cellString: game.cellString!) {
-					self.currentGameId = game.id!
-					self.activeCell = -1
-					self.selectedNumber = -1
-					self.consoleText = "Game Loaded"
-					return
-				}
-				else {return} //TODO: Handle error
+				self.game.getCellsFromString(cellString: game.cellString!)
+				self.currentGameId = game.id!
+				self.activeCell = -1
+				self.selectedNumber = -1
+				self.consoleText = "Game Loaded"
+				return
 			}
 		}
 	}
@@ -199,14 +196,14 @@ struct ContentView: View {
 		self.consoleText = "Board Cleared"
 	}
 	
-	func getColor(row: Int, col: Int) -> Color {return game.getCells()[row*9+col].getColor()}
+	func getColor(row: Int, col: Int) -> Color {return game.getCells()[row][col].getColor()}
 	
 	func getBackgroundColor(id: UUID) -> Color {if id == self.currentGameId {return Color.blue}
 		else {return backgroundColor}
 	}
 	
 	func getCellText(row: Int, col: Int) -> String{
-		if (row*9+col) != activeCell {return String(game.getCells()[row*9+col].getText())}
+		if (row*9+col) != activeCell {return String(game.getCells()[row][col].getText())}
 		if selectedNumber == 0 {return ""}
 		return String(selectedNumber)
 	}

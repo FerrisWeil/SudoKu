@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "A7D0604C-737D-41CF-B11F-404EF877832C"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2E544667-6083-4486-A2F2-1ECE9C3FBEEF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sudoku Solver/Cell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
+            landmarkName = "solveRowColBox(cells:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2E544667-6083-4486-A2F2-1ECE9C3FBEEF - d2dc9cb66462b91f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Sudoku_Solver.Solver.solveRowColBox(cells: inout Swift.Array&lt;Swift.Array&lt;Sudoku_Solver.Cell&gt;&gt;) -&gt; Swift.Bool"
+                  moduleName = "Sudoku Solver"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/taylorweil/Documents/iOS%20Apps/Sudoku%20Solver/Sudoku%20Solver/Cell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "217"
+                  endingLineNumber = "217"
+                  offsetFromSymbolStart = "6976">
+               </Location>
+               <Location
+                  uuid = "2E544667-6083-4486-A2F2-1ECE9C3FBEEF - d2dc9cb66462b91f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Sudoku_Solver.Solver.solveRowColBox(cells: inout Swift.Array&lt;Swift.Array&lt;Sudoku_Solver.Cell&gt;&gt;) -&gt; Swift.Bool"
+                  moduleName = "Sudoku Solver"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/taylorweil/Documents/iOS%20Apps/Sudoku%20Solver/Sudoku%20Solver/Cell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "217"
+                  endingLineNumber = "217"
+                  offsetFromSymbolStart = "7012">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
